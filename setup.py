@@ -5,5 +5,5 @@ setup(
     name="BingSearch",
     version="1.0.0",
     description="github.com/Filipi565",
-    executables=[Executable(script="main.py", base="gui")]
+    executables=[Executable(script="program.py", base="gui")]
 )
