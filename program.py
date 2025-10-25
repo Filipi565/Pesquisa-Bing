@@ -93,6 +93,3 @@ def main():
         window.should_quit = True
 
     window.should_quit = True
-
-if __name__ == "__main__":
-    main()
