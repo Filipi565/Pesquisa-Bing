@@ -7,27 +7,10 @@ import time
 import sys
 import os
 
-sys.dont_write_bytecode = True
-
 try:
-    from lang import * # type: ignore
+    from lang import Lang
 except ImportError:
-    import util
-    class Lang(util.StrEnum):
-        Title = "Pesquisa Bing"
-        ErrorTitle = "Erro"
-        ErrorMessage = "Error ao obter conjunto de palavras, verifique sua internet e tente novamente mais tarde. Código de Erro: {}"
-        LevelName = "Nível {}"
-        Start = "Iniciar"
-        InvalidLevelError = "Nível inválido"
-
-        @staticmethod
-        def get_level_by_var(level_var: tk.StringVar) -> int:
-            result = level_var.get()
-
-            return int(result.replace("Nível ", ""))
-    
-    del util
+    from PT_br import Lang
 
 def get_process_path() -> str:
     here = os.path.abspath(os.path.join(sys.argv[0], ".."))

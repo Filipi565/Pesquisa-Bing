@@ -1,7 +1,7 @@
 from tkinter import StringVar
-from util import StrEnum
+import util
 
-class Lang(StrEnum):
+class Lang(util.StrEnum):
     Title = ""
     ErrorTitle = ""
     ErrorMessage = ""

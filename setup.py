@@ -1,9 +1,9 @@
 from cx_Freeze import setup, Executable
-from setuptools import Extension
+from version import version
 
 setup(
     name="BingSearch",
-    version="1.0.0",
+    version=str(version),
     description="github.com/Filipi565",
-    executables=[Executable(script="program.py", base="gui")]
+    executables=[Executable(script="BingSearch.py", base="gui")]
 )
