@@ -8,7 +8,7 @@ import sys
 import os
 
 try:
-    from lang import Lang
+    from lang import Lang # type: ignore
 except ImportError:
     from PT_br import Lang
 
