@@ -20,4 +20,4 @@ class Version(int):
     def patch(self) -> int:
         return self & 0xff
     
-version = Version(1, 2, 0)
+version = Version(1, 2, 1)
