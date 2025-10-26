@@ -52,6 +52,8 @@ def start_search(level_var: tk.StringVar, should_quit: list[bool]) -> None:
         search_count = 30
     else:
         raise RuntimeError(Lang.InvalidLevelError)
+    
+    search_count = int(1.5 * search_count)
 
     quotes_searched: set[str] = {"wikipedia"}
 
