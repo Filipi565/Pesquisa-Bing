@@ -8,6 +8,8 @@ class Lang(util.StrEnum):
     LevelName = "Nível {}"
     Start = "Iniciar"
     InvalidLevelError = "Nível inválido"
+    SelectBrowser = "Selecionar Navegador"
+    Executables = "Executáveis"
 
     @staticmethod
     def get_level_by_var(level_var: tk.StringVar) -> int:

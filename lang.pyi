@@ -8,6 +8,8 @@ class Lang(util.StrEnum):
     LevelName: str
     Start: str
     InvalidLevelError: str
+    SelectBrowser: str
+    Executables: str
 
     @staticmethod
     def get_level_by_var(level_var: StringVar) -> int: ...

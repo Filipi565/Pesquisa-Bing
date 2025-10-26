@@ -1,7 +1,10 @@
+from tkinter import filedialog
 from threading import Thread
+from typing import Union
 from tkinter import ttk
 import subprocess as sp
 import tkinter as tk
+import atexit
 import random
 import time
 import sys
@@ -12,10 +15,24 @@ try:
 except ImportError:
     from PT_br import Lang
 
-def get_process_path() -> str:
-    here = os.path.abspath(os.path.join(sys.argv[0], ".."))
+HERE = os.path.abspath(os.path.join(sys.argv[0], ".."))
+_process_path: Union[str, None] = None
 
-    with open(os.path.join(here, "process_path.txt"), "r") as f:
+@atexit.register
+def _():
+    global _process_path
+
+    if (_process_path) and os.path.exists(_process_path):
+        with open(os.path.join(HERE, "process_path.txt"), "w") as f:
+            f.write(_process_path)
+
+def get_process_path() -> str:
+    global _process_path
+
+    if (_process_path):
+        return _process_path
+
+    with open(os.path.join(HERE, "process_path.txt"), "r") as f:
         return f.read()
     
 def get_random_quote(word: bytes) -> str:
@@ -28,7 +45,6 @@ def get_random_quote(word: bytes) -> str:
             pass
 
 def start_search(level_var: tk.StringVar, should_quit: list[bool]) -> None:
-    here = os.path.abspath(os.path.join(sys.argv[0], ".."))
     level = Lang.get_level_by_var(level_var)
     if (level == 1):
         search_count = 10
@@ -40,7 +56,7 @@ def start_search(level_var: tk.StringVar, should_quit: list[bool]) -> None:
     quotes_searched: set[str] = {"wikipedia"}
 
     process_path = get_process_path()
-    with open(os.path.join(here, "dictionary.txt"), "rb") as f:
+    with open(os.path.join(HERE, "dictionary.txt"), "rb") as f:
         items = f.read().splitlines()
 
     for _ in range(search_count):
@@ -71,9 +87,23 @@ class Window(tk.Tk):
         start_button = ttk.Button(self, command=self.start_search, text=Lang.Start)
         start_button.place(relx=.5, rely=.5, anchor=tk.CENTER)
 
+        select_browser = ttk.Button(self, text=Lang.SelectBrowser, command=self.select_browser)
+        select_browser.place(relx=.5, rely=.8, anchor=tk.CENTER)
+
     def start_search(self):
         t = Thread(target=start_search, args=[self.level_var, self.__should_quit])
         t.start()
+
+    def select_browser(self):
+        global _process_path
+
+        path = filedialog.askopenfilename(
+            defaultextension=".exe",
+            filetypes=[(Lang.Executables, "*.exe")]
+        )
+
+        if (path):
+            _process_path = path
 
     @property
     def should_quit(self) -> bool:
