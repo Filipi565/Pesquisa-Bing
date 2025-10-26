@@ -2,8 +2,8 @@ from version import version as current_version, Version
 from urllib.request import urlopen
 from urllib.error import HTTPError
 from bs4 import BeautifulSoup
+from zipfile import ZipFile
 from typing import Union
-import zipfile
 import sys
 import io
 import os
@@ -15,11 +15,11 @@ def get_content(url: str) -> Union[bytes, None]:
     except HTTPError:
         return None
 
-def download_zip_file(url: str) -> Union[zipfile.ZipFile, None]:
+def download_zip_file(url: str) -> Union[ZipFile, None]:
     content = get_content(url)
     
     if (content):
-        return zipfile.ZipFile(io.BytesIO(content), "r")
+        return ZipFile(io.BytesIO(content), "r")
     
 def get_dl_url(url: str) -> str:
     content = get_content(url)
