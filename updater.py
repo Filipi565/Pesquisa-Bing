@@ -15,11 +15,11 @@ def get_content(url: str) -> Union[bytes, None]:
     except HTTPError:
         return None
 
-def download_zip_file(url: str) -> Union[ZipFile, None]:
+def download_zip_file(url: str) -> Union[io.BytesIO, None]:
     content = get_content(url)
     
     if (content):
-        return ZipFile(io.BytesIO(content), "r")
+        return io.BytesIO(content)
     
 def get_dl_url(url: str) -> str:
     content = get_content(url)
@@ -33,9 +33,25 @@ def get_dl_url(url: str) -> str:
     
     return str(button.get("href", ""))
 
-def main():
+def user_want_update() -> bool:
+    return True
+
+def update(mediafire_url: str) -> None:
     lib_folder = os.path.abspath(os.path.join(sys.argv[0], "..", "lib"))
 
+    url = get_dl_url(mediafire_url)
+    if not (url):
+        return
+
+    file = download_zip_file(url)
+    if not file:
+        return
+    
+    with file:
+        with ZipFile(file, "r") as zip_file:
+            zip_file.extractall(lib_folder)
+
+def main():
     content_b = get_content("https://pastebin.com/raw/nQZRsXvJ")
     if not (content_b):
         return
@@ -47,13 +63,6 @@ def main():
     last_version = Version(*map(int, version_text.split(".")))
     if not (current_version < last_version):
         return
-
-    url = get_dl_url(mediafire_url)
-    if not (url):
-        return
-
-    file = download_zip_file(url)
-    if not file:
-        return
     
-    file.extractall(lib_folder)
+    if (user_want_update()):
+        update(mediafire_url)
