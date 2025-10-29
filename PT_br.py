@@ -16,7 +16,7 @@ class Lang(util.StrEnum):
     def get_level_by_var(level_var: tk.StringVar) -> int:
         result = level_var.get()
 
-        return int(result.replace("Nível ", ""))
+        return int(result[-1])
 
 
 del util
