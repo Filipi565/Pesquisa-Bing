@@ -10,6 +10,7 @@ class Lang(util.StrEnum):
     InvalidLevelError: str
     SelectBrowser: str
     Executables: str
+    UpdateMessage: str
 
     @staticmethod
     def get_level_by_var(level_var: StringVar) -> int: ...

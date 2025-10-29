@@ -1,12 +1,18 @@
 from version import version as current_version, Version
 from urllib.request import urlopen
 from urllib.error import HTTPError
+from tkinter import messagebox
 from bs4 import BeautifulSoup
 from zipfile import ZipFile
 from typing import Union
 import sys
 import io
 import os
+
+try:
+    from lang import Lang # type: ignore
+except ImportError:
+    from PT_br import Lang
 
 def get_content(url: str) -> Union[bytes, None]:
     try:
@@ -34,7 +40,7 @@ def get_dl_url(url: str) -> str:
     return str(button.get("href", ""))
 
 def user_want_update() -> bool:
-    return True
+    return messagebox.askyesno(Lang.Title, Lang.UpdateMessage)
 
 def update(mediafire_url: str) -> None:
     lib_folder = os.path.abspath(os.path.join(sys.argv[0], "..", "lib"))
@@ -61,6 +67,7 @@ def main():
     version_text, mediafire_url = content.splitlines()
 
     last_version = Version(*map(int, version_text.split(".")))
+
     if not (current_version < last_version):
         return
     

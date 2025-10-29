@@ -10,6 +10,7 @@ class Lang(util.StrEnum):
     InvalidLevelError = "Nível inválido"
     SelectBrowser = "Selecionar Navegador"
     Executables = "Executáveis"
+    UpdateMessage = "Pesquisa Bing obteve uma nova atualização, deseja atualizar?"
 
     @staticmethod
     def get_level_by_var(level_var: tk.StringVar) -> int:
