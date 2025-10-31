@@ -26,6 +26,40 @@ def _():
         with open(os.path.join(HERE, "process_path.txt"), "w") as f:
             f.write(_process_path)
 
+class Window(tk.Tk):
+    def __init__(self):
+        super().__init__(className="com.github.Filipi565.BingSearch")
+        self.title(Lang.Title)
+        self.geometry("300x200")
+        self.level_var = tk.StringVar(self)
+        self.should_quit = False
+        self.load_widgets()
+
+    def load_widgets(self):
+        menu = ttk.OptionMenu(self, self.level_var, Lang.LevelName.format(1), Lang.LevelName.format(1), Lang.LevelName.format(2))
+        menu.place(relx=.5, rely=.1, anchor=tk.CENTER)
+
+        start_button = ttk.Button(self, command=self.start_search, text=Lang.Start)
+        start_button.place(relx=.5, rely=.5, anchor=tk.CENTER)
+
+        select_browser = ttk.Button(self, text=Lang.SelectBrowser, command=self.select_browser)
+        select_browser.place(relx=.5, rely=.8, anchor=tk.CENTER)
+
+    def start_search(self):
+        t = Thread(target=start_search, args=[self])
+        t.start()
+
+    def select_browser(self):
+        global _process_path
+
+        path = filedialog.askopenfilename(
+            defaultextension=".exe",
+            filetypes=[(Lang.Executables, "*.exe")]
+        )
+
+        if (path):
+            _process_path = path
+
 def get_process_path() -> str:
     global _process_path
 
@@ -44,8 +78,8 @@ def get_random_quote(word: bytes) -> str:
         except UnicodeError:
             pass
 
-def start_search(level_var: tk.StringVar, should_quit: list[bool]) -> None:
-    level = Lang.get_level_by_var(level_var)
+def start_search(window: Window) -> None:
+    level = Lang.get_level_by_var(window.level_var)
     if (level == 1):
         search_count = 10
     elif (level == 2):
@@ -62,7 +96,7 @@ def start_search(level_var: tk.StringVar, should_quit: list[bool]) -> None:
         items = f.read().splitlines()
 
     for _ in range(search_count):
-        if (should_quit[0]):
+        if (window.should_quit):
             return
         while True:
             quote = get_random_quote(random.choice(items)).replace(" ", "%20")
@@ -72,50 +106,6 @@ def start_search(level_var: tk.StringVar, should_quit: list[bool]) -> None:
             
         sp.Popen([process_path, "--single-argument", f"https://www.bing.com/search?q={quote}&qs=n&form=QBRE&sp=-1&lq=0&pq=mercado+liv&sc=0-11&sk=&cvid=A0BDCD943A0A4E94A1D7A8B319714C88"])
         time.sleep(random.randint(50, 100) / 10)
-
-class Window(tk.Tk):
-    def __init__(self):
-        super().__init__(className="com.github.Filipi565.BingSearch")
-        self.title(Lang.Title)
-        self.geometry("300x200")
-        self.level_var = tk.StringVar(self)
-        self.__should_quit = [False]
-        self.load_widgets()
-
-    def load_widgets(self):
-        menu = ttk.OptionMenu(self, self.level_var, Lang.LevelName.format(1), Lang.LevelName.format(1), Lang.LevelName.format(2))
-        menu.place(relx=.5, rely=.1, anchor=tk.CENTER)
-
-        start_button = ttk.Button(self, command=self.start_search, text=Lang.Start)
-        start_button.place(relx=.5, rely=.5, anchor=tk.CENTER)
-
-        select_browser = ttk.Button(self, text=Lang.SelectBrowser, command=self.select_browser)
-        select_browser.place(relx=.5, rely=.8, anchor=tk.CENTER)
-
-    def start_search(self):
-        t = Thread(target=start_search, args=[self.level_var, self.__should_quit])
-        t.start()
-
-    def select_browser(self):
-        global _process_path
-
-        path = filedialog.askopenfilename(
-            defaultextension=".exe",
-            filetypes=[(Lang.Executables, "*.exe")]
-        )
-
-        if (path):
-            _process_path = path
-
-    @property
-    def should_quit(self) -> bool:
-        return self.__should_quit[0]
-    
-    @should_quit.setter
-    def should_quit(self, other) -> None:
-        assert isinstance(other, bool)
-
-        self.__should_quit[0] = other
 
 def main():
     window = Window()
