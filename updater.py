@@ -56,7 +56,7 @@ def update(mediafire_url: str) -> None:
     with file:
         with ZipFile(file, "r") as zip_file:
             code = zip_file.read("instructions.py")
-            exec(code, {"lib_folder": lib_folder, "zip_file": zip_file})
+            exec(code, {"lib_folder": lib_folder, "zip_file": zip_file, "version": current_version})
 
 def main():
     content_b = get_content("https://pastebin.com/raw/nQZRsXvJ")
