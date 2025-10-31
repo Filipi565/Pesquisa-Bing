@@ -3,8 +3,8 @@ from urllib.request import urlopen
 from urllib.error import HTTPError
 from tkinter import messagebox
 from bs4 import BeautifulSoup
+from typing import Union, IO
 from zipfile import ZipFile
-from typing import Union
 import sys
 import io
 import os
@@ -21,7 +21,7 @@ def get_content(url: str) -> Union[bytes, None]:
     except HTTPError:
         return None
 
-def download_zip_file(url: str) -> Union[io.BytesIO, None]:
+def download_zip_file(url: str) -> Union[IO[bytes], None]:
     content = get_content(url)
     
     if (content):

@@ -1,4 +1,3 @@
-import tkinter as tk
 import util
 
 class Lang(util.StrEnum):
@@ -13,10 +12,8 @@ class Lang(util.StrEnum):
     UpdateMessage = "Pesquisa Bing obteve uma nova atualização, deseja atualizar?"
 
     @staticmethod
-    def get_level_by_var(level_var: tk.StringVar) -> int:
-        result = level_var.get()
-
-        return int(result[-1])
+    def get_level_by_str(text: str) -> int:
+        return int(text[-1])
 
 
 del util

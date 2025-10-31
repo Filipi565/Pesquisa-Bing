@@ -1,4 +1,3 @@
-from tkinter import StringVar
 import util
 
 class Lang(util.StrEnum):
@@ -13,4 +12,4 @@ class Lang(util.StrEnum):
     UpdateMessage: str
 
     @staticmethod
-    def get_level_by_var(level_var: StringVar) -> int: ...
+    def get_level_by_str(text: str) -> int: ...

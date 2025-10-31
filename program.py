@@ -79,7 +79,7 @@ def get_random_quote(word: bytes) -> str:
             pass
 
 def start_search(window: Window) -> None:
-    level = Lang.get_level_by_var(window.level_var)
+    level = Lang.get_level_by_str(window.level_var.get())
     if (level == 1):
         search_count = 10
     elif (level == 2):
