@@ -32,22 +32,27 @@ class Window(tk.Tk):
         self.title(Lang.Title)
         self.geometry("300x200")
         self.level_var = tk.StringVar(self)
-        self.should_quit = False
+        self.should_stop = False
         self.load_widgets()
 
     def load_widgets(self):
         menu = ttk.OptionMenu(self, self.level_var, Lang.LevelName.format(1), Lang.LevelName.format(1), Lang.LevelName.format(2))
         menu.place(relx=.5, rely=.1, anchor=tk.CENTER)
 
-        start_button = ttk.Button(self, command=self.start_search, text=Lang.Start)
-        start_button.place(relx=.5, rely=.5, anchor=tk.CENTER)
+        self.button = ttk.Button(self, command=self.start_search, text=Lang.Start)
+        self.button.place(relx=.5, rely=.5, anchor=tk.CENTER)
 
         select_browser = ttk.Button(self, text=Lang.SelectBrowser, command=self.select_browser)
         select_browser.place(relx=.5, rely=.8, anchor=tk.CENTER)
 
     def start_search(self):
+        self.button.configure(command=self.stop_search, text=Lang.Stop)
         t = Thread(target=start_search, args=[self])
         t.start()
+
+    def stop_search(self):
+        self.button.configure(state="disabled", text=f"{Lang.Stoping}...")
+        self.should_stop = True
 
     def select_browser(self):
         global _process_path
@@ -96,8 +101,8 @@ def start_search(window: Window) -> None:
         items = f.read().splitlines()
 
     for _ in range(search_count):
-        if (window.should_quit):
-            return
+        if (window.should_stop):
+            break
         while True:
             quote = get_random_quote(random.choice(items)).replace(" ", "%20")
             if (quote not in quotes_searched):
@@ -107,11 +112,13 @@ def start_search(window: Window) -> None:
         sp.Popen([process_path, "--single-argument", f"https://www.bing.com/search?q={quote}&qs=n&form=QBRE&sp=-1&lq=0&pq=mercado+liv&sc=0-11&sk=&cvid=A0BDCD943A0A4E94A1D7A8B319714C88"])
         time.sleep(random.randint(50, 100) / 10)
 
+    window.button.configure(command=window.start_search, state="active", text=Lang.Start)
+
 def main():
     window = Window()
     try:
         window.mainloop()
     except BaseException:
-        window.should_quit = True
+        window.should_stop = True
 
-    window.should_quit = True
+    window.should_stop = True

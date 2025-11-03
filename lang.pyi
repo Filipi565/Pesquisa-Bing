@@ -6,6 +6,8 @@ class Lang(util.StrEnum):
     ErrorMessage: str
     LevelName: str
     Start: str
+    Stop: str
+    Stoping: str
     InvalidLevelError: str
     SelectBrowser: str
     Executables: str

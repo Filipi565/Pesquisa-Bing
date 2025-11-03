@@ -6,6 +6,8 @@ class Lang(util.StrEnum):
     ErrorMessage = "Error ao obter conjunto de palavras, verifique sua internet e tente novamente mais tarde. Código de Erro: {}"
     LevelName = "Nível {}"
     Start = "Iniciar"
+    Stop = "Parar"
+    Stoping = "Parando"
     InvalidLevelError = "Nível inválido"
     SelectBrowser = "Selecionar Navegador"
     Executables = "Executáveis"
