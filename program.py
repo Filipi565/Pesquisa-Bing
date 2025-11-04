@@ -113,6 +113,7 @@ def start_search(window: Window) -> None:
         time.sleep(random.randint(50, 100) / 10)
 
     window.button.configure(command=window.start_search, state="active", text=Lang.Start)
+    window.should_stop = False
 
 def main():
     window = Window()
