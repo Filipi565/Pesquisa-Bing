@@ -30,4 +30,7 @@ def set_process_path(process_path: str) -> None:
     if not (isinstance(process_path, str)):
         raise TypeError("process_path must be string")
     
+    if not (os.path.exists(process_path)):
+        raise FileNotFoundError(f"The file '{process_path}' does not exists")
+    
     _process_path = process_path
