@@ -15,11 +15,17 @@ except ImportError:
 
 class WindowBase:
     def __init__(self, root: Union[tk.Misc, None] = None):
-        self.level_var = tk.StringVar(root)
+        self._extra_searches_var =  tk.BooleanVar(root)
+        self._advanced_mode_var =   tk.BooleanVar(root)
+        self._search_count_var =    tk.StringVar(root)
+        self._level_var =           tk.StringVar(root)
+
+        self._extra_searches_var.set(True)
+
         self.should_stop = False
 
     def _start_search(self, on_finish):
-        t = Thread(target=start_search, args=[self, on_finish])
+        t = Thread(target=start_search, args=[self, on_finish, self.search_count])
         t.start()
 
     def select_browser(self):
@@ -31,22 +37,36 @@ class WindowBase:
         if (path):
             set_process_path(path)
 
-def start_search(window: WindowBase, on_finish) -> None:
-    level = Lang.get_level_by_str(window.level_var.get())
-    if (level == 1):
-        search_count = 10
-    elif (level == 2):
-        search_count = 30
-    else:
-        raise RuntimeError(Lang.InvalidLevelError)
-    
-    search_count = int(1.5 * search_count)
+    @property
+    def search_count(self) -> int:
+        if (self.advanced_mode):
+            multiplier = 1 + (0.5 * self.extra_searches)
+            search_count = int(self._search_count_var.get())
+            return int(search_count * multiplier)
+        else:
+            level = Lang.get_level_by_str(self._level_var.get())
+        
+            if (level == 1):
+                return 15
+            elif (level == 2):
+                return 45
+            else:
+                raise RuntimeError(Lang.InvalidLevelError)
 
+    @property
+    def advanced_mode(self) -> bool:
+        return self._advanced_mode_var.get()
+    
+    @property
+    def extra_searches(self) -> bool:
+        return self._extra_searches_var.get()
+
+def start_search(window: WindowBase, on_finish, search_count: int) -> None:
     quotes_searched: set[str] = {"wikipedia"}
 
     process_path = get_process_path()
     with open(os.path.join(HERE, "dictionary.txt"), "rb") as f:
-        items = f.read().splitlines()
+        items = f.readlines()
 
     for _ in range(search_count):
         if (window.should_stop):

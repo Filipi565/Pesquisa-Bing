@@ -12,6 +12,10 @@ class Lang(util.StrEnum):
     SelectBrowser: str
     Executables: str
     UpdateMessage: str
+    AdvancedMode: str
+    TypeSearchesNumber: str
+    TypeANumberError: str
+    ExtraSearches: str
 
     @staticmethod
     def get_level_by_str(text: str) -> int: ...

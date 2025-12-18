@@ -12,6 +12,10 @@ class Lang(util.StrEnum):
     SelectBrowser = "Selecionar Navegador"
     Executables = "Executáveis"
     UpdateMessage = "Pesquisa Bing obteve uma nova atualização, deseja atualizar?"
+    AdvancedMode = "Modo Avançado"
+    TypeSearchesNumber = "Digite o número de pesquisas"
+    TypeANumberError = "Por favor, digite quantas pesquisas deseja pesquisar"
+    ExtraSearches = "Pesquisas extras (x1.5)"
 
     @staticmethod
     def get_level_by_str(text: str) -> int:
