@@ -57,7 +57,7 @@ class Window(tk.Tk, WindowBase):
             _place_top(self.menu)
 
     def start_search(self) -> None:
-        if not (self._search_count_var.get()):
+        if (self.advanced_mode and not self._search_count_var.get()):
             messagebox.showwarning(Lang.ErrorTitle, Lang.TypeANumberError)
             return
 
